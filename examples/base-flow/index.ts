@@ -1,7 +1,7 @@
 import { ethers, keccak256 } from "ethers";
-import { Device } from "./flow/device";
-import { Service } from "./flow/service";
-import { VerifyProxy } from "./flow/verifyProxy";
+import { Device } from "./device";
+import { Service } from "./service";
+import { VerifyProxy } from "./verifyProxy";
 
 const MyDevice = new Device();
 
