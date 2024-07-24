@@ -1,9 +1,10 @@
 import { ethers } from "ethers";
+import { VERIFY_PROXY_ADDRESS } from ".";
 
 export class Device {
   name = "WatchX"
   device = ethers.Wallet.createRandom()
-  get address(){
+  get address() {
     return this.device.address
   }
 
@@ -49,7 +50,7 @@ export class Device {
       name: 'ioIDRegistry',
       version: '1',
       chainId: 4690,
-      verifyingContract: "0x0A7e595C7889dF3652A19aF52C18377bF17e027D",
+      verifyingContract: "0x0A7e595C7889dF3652A19aF52C18377bF17e027D", //ioIDRegistry address
     };
     const types = {
       Permit: [
@@ -58,7 +59,7 @@ export class Device {
       ],
     };
 
-    const signature = await this.device.signTypedData(domain, types, { owner: "0xa09ef1296c71c20ecd08d477cc7d71e9457d1223", nonce: 0 });
+    const signature = await this.device.signTypedData(domain, types, { owner: VERIFY_PROXY_ADDRESS, nonce: 0 });
     const r = signature.substring(0, 66);
     const s = '0x' + signature.substring(66, 130);
     const v = '0x' + signature.substring(130);

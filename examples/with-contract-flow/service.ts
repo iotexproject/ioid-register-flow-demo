@@ -2,10 +2,11 @@ import axios from "axios";
 import { ethers, getBytes, solidityPacked } from "ethers";
 
 export class Service {
-  verifier = new ethers.Wallet(process.env.PRIVATE_KEY as string);
+  verifier = new ethers.Wallet(process.env.VERIFY_PRIVATE_KEY as string);
 
   async verify(ownerAddress: string, deviceAddress: string) {
-    const verifyer = await axios.get(`https://ioid-backend.onrender.com/pebble/verifier?owner=${ownerAddress}&device=${deviceAddress}`)
-    return verifyer.data.verifySignature;
+    const verifyMessage = solidityPacked(['uint256', 'address', 'address'], [4690, ownerAddress, deviceAddress]);
+    const verifySignature = await this.verifier.signMessage(getBytes(verifyMessage));
+    return verifySignature;
   }
 }

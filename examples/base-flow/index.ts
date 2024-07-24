@@ -7,7 +7,7 @@ const MyDevice = new Device();
 
 const MyVerifyService = new Service()
 
-const MyVerifyProxy = new VerifyProxy(MyVerifyService.verifier.address)
+const MyVerifyProxy = new VerifyProxy()
 
 const Owner = ethers.Wallet.createRandom()
 async function main() {

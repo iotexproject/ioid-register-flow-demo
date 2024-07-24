@@ -2,12 +2,25 @@ import { ethers, keccak256 } from "ethers";
 import { Device } from "./device";
 import { Service } from "./service";
 import { VerifyProxy } from "./verifyProxy";
+import { createPublicClient, createWalletClient, http } from "viem";
+import { iotexTestnet } from "viem/chains";
+
+export const VERIFY_PROXY_ADDRESS = "0x61e832eea8eb7a7ac705a0ff01add262e3649338"
+export const publicClient = createPublicClient({
+  chain: iotexTestnet,
+  transport: http()
+})
+export const walletClient = createWalletClient({
+  chain: iotexTestnet,
+  transport: http()
+})
 
 const MyDevice = new Device();
 
 const MyVerifyService = new Service()
 
-const MyVerifyProxy = new VerifyProxy(MyVerifyService.verifier.address)
+//create by contract UniversalFactory,need verfiyadress is equal to process.env.VERIFY_PRIVATE_KEY
+const MyVerifyProxy = new VerifyProxy(VERIFY_PROXY_ADDRESS)
 
 const Owner = ethers.Wallet.createRandom()
 

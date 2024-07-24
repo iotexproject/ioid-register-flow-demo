@@ -2,34 +2,23 @@ import { createPublicClient, createWalletClient, getContract, http } from "viem"
 import { VerifyingProxy } from "./abi";
 import { iotexTestnet } from "viem/chains";
 import { privateKeyToAccount } from "viem/accounts";
+import { publicClient, walletClient } from ".";
 
-const publicClient = createPublicClient({
-  chain: iotexTestnet,
-  transport: http()
-})
-
-const walletClient = createWalletClient({
-  chain: iotexTestnet,
-  transport: http()
-})
-
-const account = privateKeyToAccount(process.env.PRIVATE_KEY as any)
+const account = privateKeyToAccount(process.env.VERIFY_PRIVATE_KEY as any)
 
 export class VerifyProxy {
-  verifyAddress: string;
+  contract;
 
-  contract = getContract({
-    abi: VerifyingProxy,
-    //create by contract UniversalFactory
-    address: "0xa09ef1296c71c20ecd08d477cc7d71e9457d1223",
-    client: {
-      public: publicClient,
-      wallet: walletClient,
-    }
-  })
+  constructor(verifyProxyAddress: string) {
+    this.contract = getContract({
+      abi: VerifyingProxy,
 
-  constructor(verifyAddress: string) {
-    this.verifyAddress = verifyAddress
+      address: verifyProxyAddress as `0x${string}`,
+      client: {
+        public: publicClient,
+        wallet: walletClient,
+      }
+    })
   }
 
   async register({

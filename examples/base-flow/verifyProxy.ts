@@ -1,10 +1,4 @@
 export class VerifyProxy {
-  verifyAddress: string;
-
-  constructor(verifyAddress: string) {
-    this.verifyAddress = verifyAddress
-  }
-
   register({
     _verifySignature,
     _hash,
