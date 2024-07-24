@@ -9,6 +9,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "ethers": "^6.13.1"
+    "axios": "^1.7.2",
+    "ethers": "^6.13.1",
+    "viem": "^2.17.11"
   }
 }

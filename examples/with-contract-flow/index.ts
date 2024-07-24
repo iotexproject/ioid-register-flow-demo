@@ -10,6 +10,7 @@ const MyVerifyService = new Service()
 const MyVerifyProxy = new VerifyProxy(MyVerifyService.verifier.address)
 
 const Owner = ethers.Wallet.createRandom()
+
 async function main() {
   // 0.find device
   const did = MyDevice.did
@@ -32,7 +33,7 @@ async function main() {
   console.log('3.diddoc upload success:', 'http://resolver.did', '\n\n')
 
   // 4.all signature params is ready,call verifyProxy register function.
-  const res = MyVerifyProxy.register({
+  const res = await MyVerifyProxy.register({
     _verifySignature: verifySignature,
     _hash: keccak256(did.replace('did:io:', '')), //did hash
     _uri: diduri, //diddoc
