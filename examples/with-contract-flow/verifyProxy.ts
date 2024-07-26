@@ -31,6 +31,17 @@ export class VerifyProxy {
     _r,
     _s
   }: any) {
+    console.log(
+      "Register params:", {
+      _verifySignature,
+      _hash,
+      _uri,
+      _owner,
+      _device,
+      _v,
+      _r,
+      _s
+    })
     return await publicClient.waitForTransactionReceipt({
       hash: await this.contract.write.register([
         _verifySignature,

@@ -1,5 +1,15 @@
 # ioid-register-demo
 
+## file structure
+```
+📦with-contract-flow（Code with the full contract example）
+ ┣ 📂abi
+ ┃ ┗ 📜index.ts (abi for storing contracts)
+ ┣ 📜device.ts (Analulated devices, can be software or hardware)
+ ┣ 📜index.ts 
+ ┣ 📜service.ts (Services used for verify signatures)
+ ┗ 📜verifyProxy.ts (Calls the verifyProxy registration method）
+ ```
 ## test account
 ```
 {
