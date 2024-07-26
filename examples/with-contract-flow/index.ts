@@ -5,7 +5,8 @@ import { VerifyProxy } from "./verifyProxy";
 import { createPublicClient, createWalletClient, http } from "viem";
 import { iotexTestnet } from "viem/chains";
 
-export const VERIFY_PROXY_ADDRESS = "0x61e832eea8eb7a7ac705a0ff01add262e3649338"
+export const VERIFY_PROXY_ADDRESS = process.env.VERIFY_PROXY_ADDRESS as any
+
 export const publicClient = createPublicClient({
   chain: iotexTestnet,
   transport: http()
