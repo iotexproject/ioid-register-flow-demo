@@ -36,7 +36,7 @@ async function main() {
   console.log('1.device sign message success:', { r, s, v }, '\n\n')
 
   // 2.verify owner and device by verify service
-  const verifySignature = await MyVerifyService.verify(Owner.address, MyDevice.address)
+  const verifySignature = await MyVerifyService.verify("0x610CBDa6f0037B4141A5B949f56479106BeCb1E9", MyDevice.address)
   console.log('2.verifyer sign message success:', verifySignature, '\n\n')
 
   // 3.todo upload diddoc to ipfs
@@ -51,13 +51,15 @@ async function main() {
     _verifySignature: verifySignature,
     _hash: keccak256(did.replace('did:io:', '')), //did hash
     _uri: diduri, //diddoc
-    _owner: Owner.address,
+    // _owner: Owner.address,
+    _owner: "0x610CBDa6f0037B4141A5B949f56479106BeCb1E9",
     _device: MyDevice.address,
     _v: v,
     _r: r,
     _s: s
   })
   console.log('4.register success:', res)
+  console.log('5.go to the iotexscan:->', `https://testnet.iotexscan.io/tx/${res.transactionHash}`)
 }
 
 main()
