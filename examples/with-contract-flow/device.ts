@@ -41,7 +41,7 @@ export class Device {
       name: 'ioIDRegistry',
       version: '1',
       chainId: 4690,
-      verifyingContract: "0x0A7e595C7889dF3652A19aF52C18377bF17e027D", //ioIDRegistry address
+      verifyingContract: process.env.IOID_REGISTER_ADDRESS ?? "0x0A7e595C7889dF3652A19aF52C18377bF17e027D", //ioIDRegistry address
     };
     const types = {
       Permit: [

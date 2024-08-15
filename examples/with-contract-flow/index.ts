@@ -37,19 +37,20 @@ async function main() {
   console.log('1.device sign message success:', { r, s, v }, '\n\n')
 
   // 2.verify owner and device by verify service
-  const verifySignature = await MyVerifyService.signMessage("0x610CBDa6f0037B4141A5B949f56479106BeCb1E9", MyDevice.address)
+  const verifySignature = await MyVerifyService.signMessage(Owner.address, MyDevice.address)
   console.log('2.verifyer sign message success:', verifySignature, '\n\n')
 
-  // 3.todo upload diddoc to ipfs
-  const ipfsRes = await axios.post(`https://did.iotex.me/upload`, { data: MyDevice.diddoc, type: 'ipfs' });
-  const { cid } = ipfsRes.data;
-  console.log('3.diddoc upload success:', cid, '\n\n')
+  // 3.optional: upload diddoc to ipfs
+  // const ipfsRes = await axios.post(`https://did.iotex.me/upload`, { data: MyDevice.diddoc, type: 'ipfs' });
+  // const { cid } = ipfsRes.data;
+  // console.log('3.diddoc upload success:', cid, '\n\n')
+  const diduri = 'http://resolver.did'
 
   // 4.all signature params is ready,call verifyProxy register function.
   const res = await MyVerifyProxy.register({
     _verifySignature: verifySignature,
-    _hash: keccak256(did.replace('did:io:', '')), //did hash
-    _uri: cid, //diddoc
+    _hash: keccak256(MyDevice.address), //did hash
+    _uri: diduri, //diddoc
     _owner: Owner.address,
     _device: MyDevice.address,
     _v: v,
