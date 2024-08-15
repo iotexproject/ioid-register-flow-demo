@@ -50,8 +50,7 @@ async function main() {
     _verifySignature: verifySignature,
     _hash: keccak256(did.replace('did:io:', '')), //did hash
     _uri: cid, //diddoc
-    // _owner: Owner.address,
-    _owner: "0x610CBDa6f0037B4141A5B949f56479106BeCb1E9",
+    _owner: Owner.address,
     _device: MyDevice.address,
     _v: v,
     _r: r,
