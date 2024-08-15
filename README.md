@@ -15,6 +15,7 @@
 To install dependencies:
 ```bash
 bun install
+pnpm add @spruceid/didkit (run postinstall. bun has the compatibility issues)
 ```
 
 To run:

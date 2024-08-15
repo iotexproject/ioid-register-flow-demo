@@ -4,6 +4,7 @@ import { Service } from "./service";
 import { VerifyProxy } from "./verifyProxy";
 import { createPublicClient, createWalletClient, http } from "viem";
 import { iotexTestnet } from "viem/chains";
+import axios from "axios";
 
 export const VERIFY_PROXY_ADDRESS = process.env.VERIFY_PROXY_ADDRESS as any
 
@@ -36,21 +37,19 @@ async function main() {
   console.log('1.device sign message success:', { r, s, v }, '\n\n')
 
   // 2.verify owner and device by verify service
-  const verifySignature = await MyVerifyService.verify("0x610CBDa6f0037B4141A5B949f56479106BeCb1E9", MyDevice.address)
+  const verifySignature = await MyVerifyService.signMessage("0x610CBDa6f0037B4141A5B949f56479106BeCb1E9", MyDevice.address)
   console.log('2.verifyer sign message success:', verifySignature, '\n\n')
 
   // 3.todo upload diddoc to ipfs
-  // const doc = MyDevice.diddoc
-  // const ipfsRes = await axios.post(`${ipfsServiceUrl}/upload`, { data: MyDevice.diddoc, type: 'ipfs' });
-  // const { cid } = ipfsRes.data;
-  const diduri = 'http://resolver.did'
-  console.log('3.diddoc upload success:', 'http://resolver.did', '\n\n')
+  const ipfsRes = await axios.post(`https://did.iotex.me/upload`, { data: MyDevice.diddoc, type: 'ipfs' });
+  const { cid } = ipfsRes.data;
+  console.log('3.diddoc upload success:', cid, '\n\n')
 
   // 4.all signature params is ready,call verifyProxy register function.
   const res = await MyVerifyProxy.register({
     _verifySignature: verifySignature,
     _hash: keccak256(did.replace('did:io:', '')), //did hash
-    _uri: diduri, //diddoc
+    _uri: cid, //diddoc
     // _owner: Owner.address,
     _owner: "0x610CBDa6f0037B4141A5B949f56479106BeCb1E9",
     _device: MyDevice.address,
