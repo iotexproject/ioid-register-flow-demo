@@ -24,8 +24,8 @@ const MyVerifyService = new Service()
 //create by contract UniversalFactory,need verfiyadress is equal to process.env.VERIFY_PRIVATE_KEY
 const MyVerifyProxy = new VerifyProxy(VERIFY_PROXY_ADDRESS)
 
-const Owner = ethers.Wallet.createRandom()
-
+const Owner = process.env.OWNER_PRIVATE_KEY ? new ethers.Wallet(process.env.OWNER_PRIVATE_KEY as string) : ethers.Wallet.createRandom()
+console.log(Owner.address, '\n\n')
 async function main() {
   // 0.find device
   const did = MyDevice.did

@@ -15,6 +15,7 @@ export class Device {
 
   get diddoc() {
     return {}
+    // generate diddoc
     // const key = DIDKit.generateEd25519Key();
     // const did = DIDKit.keyToDID('key', key);
     // const verificationMethod = DIDKit.keyToVerificationMethod('key', key);
