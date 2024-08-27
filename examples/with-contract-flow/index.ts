@@ -3,17 +3,17 @@ import { Device } from "./device";
 import { Service } from "./service";
 import { VerifyProxy } from "./verifyProxy";
 import { createPublicClient, createWalletClient, http } from "viem";
-import { iotexTestnet } from "viem/chains";
-import axios from "axios";
+import { iotex } from "viem/chains";
+
 
 export const VERIFY_PROXY_ADDRESS = process.env.VERIFY_PROXY_ADDRESS as any
 
 export const publicClient = createPublicClient({
-  chain: iotexTestnet,
+  chain: iotex,
   transport: http()
 })
 export const walletClient = createWalletClient({
-  chain: iotexTestnet,
+  chain: iotex,
   transport: http()
 })
 
@@ -58,7 +58,7 @@ async function main() {
     _s: s
   })
   console.log('4.register success:', res)
-  console.log('5.go to the iotexscan:->', `https://testnet.iotexscan.io/tx/${res.transactionHash}`)
+  console.log('5.go to the iotexscan:->', `https://iotexscan.io/tx/${res.transactionHash}`)
 }
 
 main()

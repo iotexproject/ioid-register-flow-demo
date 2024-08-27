@@ -39,8 +39,8 @@ export class Device {
     const domain = {
       name: 'ioIDRegistry',
       version: '1',
-      chainId: 4690,
-      verifyingContract: process.env.IOID_REGISTER_ADDRESS ?? "0x0A7e595C7889dF3652A19aF52C18377bF17e027D", //ioIDRegistry address
+      chainId: 4689,
+      verifyingContract: process.env.IOID_REGISTER_ADDRESS ?? "0x04e4655Cf258EC802D17c23ec6112Ef7d97Fa2aF", //ioIDRegistry address
     };
     const types = {
       Permit: [
