@@ -3,17 +3,17 @@ import { Device } from "./device";
 import { Service } from "./service";
 import { VerifyProxy } from "./verifyProxy";
 import { createPublicClient, createWalletClient, http } from "viem";
-import { iotex } from "viem/chains";
+import { iotex, iotexTestnet } from "viem/chains";
 
 
 export const VERIFY_PROXY_ADDRESS = process.env.VERIFY_PROXY_ADDRESS as any
 
 export const publicClient = createPublicClient({
-  chain: iotex,
+  chain: Number(process.env.CHAIN_ID) == 4689 ? iotex : iotexTestnet,
   transport: http()
 })
 export const walletClient = createWalletClient({
-  chain: iotex,
+  chain: Number(process.env.CHAIN_ID) == 4689 ? iotex : iotexTestnet,
   transport: http()
 })
 
