@@ -40,7 +40,7 @@ export class Device {
       name: 'ioIDRegistry',
       version: '1',
       chainId: process.env.CHAIN_ID,
-      verifyingContract: process.env.IOID_REGISTER_ADDRESS ?? "0x04e4655Cf258EC802D17c23ec6112Ef7d97Fa2aF", //ioIDRegistry address
+      verifyingContract: Number(process.env.CHAIN_ID) == 4689 ? '0x04e4655Cf258EC802D17c23ec6112Ef7d97Fa2aF' : "0x0A7e595C7889dF3652A19aF52C18377bF17e027D"
     };
     const types = {
       Permit: [

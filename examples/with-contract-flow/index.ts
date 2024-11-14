@@ -37,7 +37,7 @@ async function main() {
   console.log('1.device sign message success:', { r, s, v }, '\n\n')
 
   // 2.verify owner and device by verify service
-  const verifySignature = await MyVerifyService.signMessage(Owner.address, MyDevice.address)
+  const verifySignature = await MyVerifyService.signMessage("0xe0895BA7C3545C41324E3605F9BAB95816e8ba6A", MyDevice.address)
   console.log('2.verifyer sign message success:', verifySignature, '\n\n')
 
   // 3.optional: upload diddoc to ipfs
@@ -51,7 +51,7 @@ async function main() {
     _verifySignature: verifySignature,
     _hash: keccak256(MyDevice.address), //did hash
     _uri: diduri, //diddoc
-    _owner: Owner.address,
+    _owner: "0xe0895BA7C3545C41324E3605F9BAB95816e8ba6A",
     _device: MyDevice.address,
     _v: v,
     _r: r,
