@@ -1,31 +1,26 @@
 import { ethers, keccak256 } from "ethers";
+import { VerifyProxy } from "./verifyProxy";
 import { Device } from "./device";
 import { Service } from "./service";
-import { VerifyProxy } from "./verifyProxy";
-import { createPublicClient, createWalletClient, http } from "viem";
-import { iotex, iotexTestnet } from "viem/chains";
-
-
+console.log(process.env.CHAIN_ID, 'process.env.CHAIN_ID')
 export const VERIFY_PROXY_ADDRESS = process.env.VERIFY_PROXY_ADDRESS as any
+const chainId = Number(process.env.CHAIN_ID) ?? 4689
 
-export const publicClient = createPublicClient({
-  chain: Number(process.env.CHAIN_ID) == 4689 ? iotex : iotexTestnet,
-  transport: http()
-})
-export const walletClient = createWalletClient({
-  chain: Number(process.env.CHAIN_ID) == 4689 ? iotex : iotexTestnet,
-  transport: http()
-})
-
-const MyDevice = new Device();
-
-const MyVerifyService = new Service()
+const MyDevice = new Device({
+  chainId,
+  verifyProxyAddress: VERIFY_PROXY_ADDRESS
+});
+const MyVerifyService = new Service(process.env.VERIFY_PRIVATE_KEY as any)
 
 //create by contract UniversalFactory,need verfiyadress is equal to process.env.VERIFY_PRIVATE_KEY
-const MyVerifyProxy = new VerifyProxy(VERIFY_PROXY_ADDRESS)
+const MyVerifyProxy = new VerifyProxy({
+  address: VERIFY_PROXY_ADDRESS,
+  chainId: Number(process.env.CHAIN_ID) ?? 4689,
+  privateKey: process.env.VERIFY_PRIVATE_KEY as any
+})
 
 const Owner = process.env.OWNER_PRIVATE_KEY ? new ethers.Wallet(process.env.OWNER_PRIVATE_KEY as string) : ethers.Wallet.createRandom()
-console.log(Owner.address, '\n\n')
+
 async function main() {
   // 0.find device
   const did = MyDevice.did
@@ -37,7 +32,7 @@ async function main() {
   console.log('1.device sign message success:', { r, s, v }, '\n\n')
 
   // 2.verify owner and device by verify service
-  const verifySignature = await MyVerifyService.signMessage("0xe0895BA7C3545C41324E3605F9BAB95816e8ba6A", MyDevice.address)
+  const verifySignature = await MyVerifyService.signMessage(Owner.address, MyDevice.address)
   console.log('2.verifyer sign message success:', verifySignature, '\n\n')
 
   // 3.optional: upload diddoc to ipfs
@@ -51,7 +46,7 @@ async function main() {
     _verifySignature: verifySignature,
     _hash: keccak256(MyDevice.address), //did hash
     _uri: diduri, //diddoc
-    _owner: "0xe0895BA7C3545C41324E3605F9BAB95816e8ba6A",
+    _owner: Owner.address,
     _device: MyDevice.address,
     _v: v,
     _r: r,

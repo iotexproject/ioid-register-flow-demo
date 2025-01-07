@@ -1,8 +1,9 @@
 import { ethers } from "ethers";
-import { VERIFY_PROXY_ADDRESS } from ".";
 // import DIDKit from '@spruceid/didkit';
 
 export class Device {
+  chainId: number;
+  verifyProxyAddress: `0x${string}`;
   name = "DepinDevice"
   device = ethers.Wallet.createRandom()
   get address() {
@@ -35,12 +36,19 @@ export class Device {
     // return vc
   }
 
+  constructor({ chainId, verifyProxyAddress }: { chainId: number, verifyProxyAddress: `0x${string}` }) {
+    this.chainId = chainId
+    this.verifyProxyAddress = verifyProxyAddress
+  }
+
   async sign() {
     const domain = {
       name: 'ioIDRegistry',
       version: '1',
       chainId: process.env.CHAIN_ID,
-      verifyingContract: Number(process.env.CHAIN_ID) == 4689 ? '0x04e4655Cf258EC802D17c23ec6112Ef7d97Fa2aF' : "0x0A7e595C7889dF3652A19aF52C18377bF17e027D"
+      verifyingContract: this.chainId == 4689
+        ? '0x04e4655Cf258EC802D17c23ec6112Ef7d97Fa2aF'
+        : "0x0A7e595C7889dF3652A19aF52C18377bF17e027D"
     };
     const types = {
       Permit: [
@@ -49,7 +57,7 @@ export class Device {
       ],
     };
 
-    const signature = await this.device.signTypedData(domain, types, { owner: VERIFY_PROXY_ADDRESS, nonce: 0 });
+    const signature = await this.device.signTypedData(domain, types, { owner: this.verifyProxyAddress, nonce: 0 });
     const r = signature.substring(0, 66);
     const s = '0x' + signature.substring(66, 130);
     const v = '0x' + signature.substring(130);

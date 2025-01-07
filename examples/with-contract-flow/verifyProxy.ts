@@ -1,23 +1,30 @@
-import { createPublicClient, createWalletClient, getContract, http } from "viem";
-import { VerifyingProxy } from "./abi";
 import { privateKeyToAccount } from "viem/accounts";
-import { publicClient, walletClient } from ".";
-
-const account = privateKeyToAccount(process.env.VERIFY_PRIVATE_KEY as any)
+import { VerifyingProxy } from "./abi";
+import { publicClient, walletClient } from "../../helper/client";
+import { getContract } from "viem";
 
 export class VerifyProxy {
   //@ts-ignore
-  contract;
+  contract: any;
+  account = privateKeyToAccount(process.env.VERIFY_PRIVATE_KEY as any);
+  publicClient: any;
+  walletClient: any;
 
-  constructor(verifyProxyAddress: string) {
+  constructor({ address, chainId, privateKey }: { address: `0x${string}`, chainId: number, privateKey: `0x${string}` }) {
+    this.publicClient = publicClient(chainId ?? process.env.CHAIN_ID ?? 4689);
+    this.walletClient = walletClient(chainId ?? process.env.CHAIN_ID ?? 4689);
     this.contract = getContract({
       abi: VerifyingProxy,
-      address: verifyProxyAddress as `0x${string}`,
+      address: address as `0x${string}`,
       client: {
-        public: publicClient,
-        wallet: walletClient,
+        public: this.publicClient,
+        wallet: this.walletClient,
       }
     })
+
+    if (privateKey) {
+      this.account = privateKeyToAccount(privateKey);
+    }
   }
 
   async register({
@@ -41,7 +48,9 @@ export class VerifyProxy {
       _r,
       _s
     })
-    return await publicClient.waitForTransactionReceipt({
+
+
+    return await this.publicClient.waitForTransactionReceipt({
       hash: await this.contract.write.register([
         _verifySignature,
         _hash,
@@ -51,7 +60,7 @@ export class VerifyProxy {
         _v,
         _r,
         _s
-      ], { account })
+      ], { account: this.account })
     })
   }
 }
