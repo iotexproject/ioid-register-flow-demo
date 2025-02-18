@@ -41,8 +41,7 @@ async function main() {
   // console.log('3.diddoc upload success:', cid, '\n\n')
   const diduri = 'http://resolver.did'
 
-  // 4.all signature params is ready,call verifyProxy register function.
-  const res = await MyVerifyProxy.register({
+  const registerParams = {
     _verifySignature: verifySignature,
     _hash: keccak256(MyDevice.address), //did hash
     _uri: diduri, //diddoc
@@ -51,7 +50,18 @@ async function main() {
     _v: v,
     _r: r,
     _s: s
-  })
+  }
+
+  // 4.all signature params is ready,call verifyProxy register function.
+  const res = await MyVerifyProxy.register(registerParams)
+
+  // // use multicall to register (optional)
+  // const calls = [{
+  //   functionName: 'register',
+  //   params: registerParams
+  // }]
+  // const res = await MyVerifyProxy.multicall(calls)
+
   console.log('4.register success:', res)
   console.log('5.go to the iotexscan:->', `https://iotexscan.io/tx/${res.transactionHash}`)
 }

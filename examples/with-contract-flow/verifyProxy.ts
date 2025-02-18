@@ -1,7 +1,7 @@
 import { privateKeyToAccount } from "viem/accounts";
 import { VerifyingProxy } from "./abi";
 import { publicClient, walletClient } from "../../helper/client";
-import { getContract } from "viem";
+import { encodeFunctionData, getContract } from "viem";
 
 export class VerifyProxy {
   //@ts-ignore
@@ -62,5 +62,44 @@ export class VerifyProxy {
         _s
       ], { account: this.account })
     })
+  }
+
+  async multicall(calls: { functionName: string; params: any }[]) {
+    const calldata = calls.map(call => {
+      if (call.functionName === 'register') {
+        const {
+          _verifySignature,
+          _hash,
+          _uri,
+          _owner,
+          _device,
+          _v,
+          _r,
+          _s
+        } = call.params;
+
+        return encodeFunctionData({
+          abi: VerifyingProxy,
+          functionName: 'register',
+          args: [
+            _verifySignature,
+            _hash,
+            _uri,
+            _owner,
+            _device,
+            _v,
+            _r,
+            _s
+          ]
+        });
+      }
+      throw new Error(`Unsupported function: ${call.functionName}`);
+    });
+
+    const hash = await this.contract.write.multicall([calldata], {
+      account: this.account
+    });
+
+    return await this.publicClient.waitForTransactionReceipt({ hash });
   }
 }
