@@ -63,7 +63,12 @@ async function main() {
   // const res = await MyVerifyProxy.multicall(calls)
 
   console.log('4.register success:', res)
-  console.log('5.go to the iotexscan:->', `https://iotexscan.io/tx/${res.transactionHash}`)
+  if (chainId === 4689) {
+    console.log('5.go to the iotexscan:->', `https://iotexscan.io/tx/${res.transactionHash}`)
+  }
+  if (chainId === 4690) {
+    console.log('5.go to the iotexscan:->', `https://testnet.iotexscan.io/tx/${res.transactionHash}`)
+  }
 }
 
 main()
