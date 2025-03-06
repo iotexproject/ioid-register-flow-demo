@@ -8,8 +8,8 @@ const tokenId = 1;
 const weight = 10;
 
 async function main() {
-  if (!process.env.GAUGE_ADDRESS || !process.env.OWNER_PRIVATE_KEY || !process.env.CHAIN_ID) {
-    throw new Error("GAUGE_ADDRESS and OWNER_PRIVATE_KEY and CHAIN_ID must be set");
+  if (!process.env.GAUGE_ADDRESS || !process.env.GAUGE_OWNER_PRIVATE_KEY || !process.env.CHAIN_ID) {
+    throw new Error("GAUGE_ADDRESS and GAUGE_OWNER_PRIVATE_KEY and CHAIN_ID must be set");
   }
 
   // 1. first get gauge contract
@@ -40,7 +40,8 @@ async function main() {
   const currentWeight = await contract.read.weight([BigInt(tokenId)]);
   console.log(`Current weight for tokenId ${tokenId}:`, currentWeight.toString());
 
-  const account = privateKeyToAccount(process.env.OWNER_PRIVATE_KEY as `0x${string}`);
+  // use gauge owner private key to set weight
+  const account = privateKeyToAccount(process.env.GAUGE_OWNER_PRIVATE_KEY as `0x${string}`);
 
   // 5. set new weight
   const hash = await contract.write.setWeight(
